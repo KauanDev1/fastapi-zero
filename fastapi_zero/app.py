@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 # Importar schemas
 from fastapi_zero.schemas import UserDB, UserList, UserPublic, UserSchema
@@ -58,6 +58,14 @@ def read_users():
 # para atualização 
 def update_user(user_id: int, user: UserSchema):
     user_with_id = UserDB(**user.model_dump(), id=user_id)
+
+    if user_id < 0 or user_id > len(database):
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Usuário inexistente, adicione um usuário valido!'
+        )
+
+
     # pega dentro do database o valor do id e subtrai pro 1 para validar a posição do
     # usuario, já q lista começão de 0, 1, 2 e o valor do id do usuario é 1, 2, 3 
     database[user_id - 1] = user_with_id
