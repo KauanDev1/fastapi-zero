@@ -53,7 +53,12 @@ def read_users():
 @app.put(
     '/users/{user_id}', status_code=HTTPStatus.OK, response_model=UserPublic
 )
+# PUT para atualizar ele atualiza todo o usuario, toda a informação de usuario
+# bem parecido com o post na logica porem ele mantém o id do usuario selecionado
+# para atualização 
 def update_user(user_id: int, user: UserSchema):
     user_with_id = UserDB(**user.model_dump(), id=user_id)
+    # pega dentro do database o valor do id e subtrai pro 1 para validar a posição do
+    # usuario, já q lista começão de 0, 1, 2 e o valor do id do usuario é 1, 2, 3 
     database[user_id - 1] = user_with_id
     return user_with_id
