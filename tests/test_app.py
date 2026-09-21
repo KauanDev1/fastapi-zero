@@ -12,6 +12,7 @@ def test_create_user(client):
     # Cria a requisição que o cliente vai usar para fazer o teste, como a rota
     # testada é a rota users q usa o metodo post. ele recebe o parametros
     # json={} q é os dados q serao enviados no teste
+    # Quando for post precisa ter o json com oq vai ser enviado para testar
     response = client.post(
         '/users/',
         json={
@@ -30,4 +31,15 @@ def test_create_user(client):
         'id': 1,
         'username': 'alice',
         'email': 'alice@example.com',
+    }
+
+
+def test_read_user(client):
+    # por ser um metodo get nao preciso enviar nada com o metodo json(),
+    # apenas testar a resposta com assert
+    response = client.get('/users/')
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'users': [{'username': 'alice', 'email': 'alice@example.com', 'id': 1}]
     }
