@@ -12,7 +12,7 @@ database = []
 
 @app.get('/')
 def read_root():
-    return {'message': 'Olá mundo!'}
+    return {'api_status': 'online'}
 
 
 # Response model é como a requisição irá retornar para o usuario e status code
@@ -54,19 +54,19 @@ def read_users():
     '/users/{user_id}', status_code=HTTPStatus.OK, response_model=UserPublic
 )
 # PUT para atualizar ele atualiza todo o usuario, toda a informação de usuario
-# bem parecido com o post na logica porem ele mantém o id do usuario selecionado
-# para atualização 
+# bem parecido com o post na logica porem ele mantém o id do usuario
+# selecionado para atualização
 def update_user(user_id: int, user: UserSchema):
     user_with_id = UserDB(**user.model_dump(), id=user_id)
 
     if user_id < 0 or user_id > len(database):
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='Usuário inexistente, adicione um usuário valido!'
+            detail='Usuário inexistente, adicione um usuário valido!',
         )
 
-
-    # pega dentro do database o valor do id e subtrai pro 1 para validar a posição do
-    # usuario, já q lista começão de 0, 1, 2 e o valor do id do usuario é 1, 2, 3 
+    # pega dentro do database o valor do id e subtrai pro 1 para validar a
+    # posição do usuario, já q lista começão de 0, 1, 2 e o valor do id
+    # do usuario é 1, 2, 3
     database[user_id - 1] = user_with_id
     return user_with_id
