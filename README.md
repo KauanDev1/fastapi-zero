@@ -156,7 +156,7 @@ Depois de `task test`, o relatório de cobertura em HTML fica em `htmlcov/index.
 
 <div align="center">
 
-**2 finalizadas** &nbsp;•&nbsp; **1 em andamento** &nbsp;•&nbsp; **12 pela frente**
+**3 finalizadas** &nbsp;•&nbsp; **1 em andamento** &nbsp;•&nbsp; **11 pela frente**
 
 </div>
 
