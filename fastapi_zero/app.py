@@ -84,3 +84,8 @@ def delete_user(user_id: int):
             detail='Usuário inexistente, adicione um usuário valido!',
         )
     return database.pop(user_id - 1)
+
+@app.get('/users/{user_id}', status_code=HTTPStatus.OK, response_model=UserPublic)
+def read_one_users(user_id: int):
+    user_with_id = database[user_id - 1]
+    return user_with_id
