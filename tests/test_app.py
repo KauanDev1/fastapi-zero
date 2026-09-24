@@ -36,7 +36,7 @@ def test_create_user(client):
 
 def test_read_user(client):
     # por ser um metodo get nao preciso enviar nada com o metodo json={},
-    # apenas testar a resposta com assert
+    # apenas testar a resposta com assert.
     response = client.get('/users/')
 
     assert response.status_code == HTTPStatus.OK
@@ -61,7 +61,7 @@ def test_update_user(client):
         'email': 'alice@example.com',
         'id': 1,
     }
-    
+
     response = client.put(
         '/users/2',
         json={
