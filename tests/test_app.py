@@ -61,6 +61,7 @@ def test_update_user(client):
         'email': 'alice@example.com',
         'id': 1,
     }
+    
     response = client.put(
         '/users/2',
         json={
