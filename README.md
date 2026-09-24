@@ -140,8 +140,8 @@ Depois de `task test`, o relatório de cobertura em HTML fica em `htmlcov/index.
 | :----: | --------------------------------------------------------------- | :----: |
 | **01** | Configurando o ambiente de desenvolvimento                       |   ✅   |
 | **02** | Introdução ao desenvolvimento WEB                                |   ✅   |
-| **03** | Estruturando o projeto e criando rotas CRUD                      |   🟡   |
-| **04** | Configurando o banco de dados e gerenciando migrações com Alembic |   ⬜   |
+| **03** | Estruturando o projeto e criando rotas CRUD                      |   ✅   |
+| **04** | Configurando o banco de dados e gerenciando migrações com Alembic |   🟡   |
 | **05** | Integrando banco de dados à API                                  |   ⬜   |
 | **06** | Autenticação e Autorização com JWT                               |   ⬜   |
 | **07** | Refatorando a estrutura do projeto                               |   ⬜   |
