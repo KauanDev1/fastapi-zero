@@ -16,7 +16,7 @@ do [Eduardo Mendes — `dunossauro`](https://www.youtube.com/@Dunossauro) 🦖**
 
 <br>
 
-`status:` **em andamento** 🛠️ &nbsp;•&nbsp; `progresso:` **2 / 15 aulas**
+`status:` **em andamento** 🛠️ &nbsp;•&nbsp; `progresso:` **3 / 15 aulas**
 
 ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱
 
