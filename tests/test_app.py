@@ -90,3 +90,20 @@ def test_delete_user(client):
     assert response.json() == {
         'detail': 'Usuário inexistente, adicione um usuário valido!'
     }
+
+
+def test_one_user(client):
+    test_create_user(client)
+    response = client.get('/users/1')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'alice',
+        'email': 'alice@example.com',
+        'id': 1,
+    }
+
+    response = client.get('/users/9')
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {
+        'detail': 'Usuário inexistente, adicione um usuário valido!'
+    }
