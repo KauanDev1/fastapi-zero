@@ -61,3 +61,31 @@ def test_update_user(client):
         'email': 'alice@example.com',
         'id': 1,
     }
+    response = client.put(
+        '/users/2',
+        json={
+            'username': 'alice',
+            'email': 'alice@example.com',
+            'password': 'secret',
+        },
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {
+        'detail': 'Usuário inexistente, adicione um usuário valido!'
+    }
+
+
+def test_delete_user(client):
+    response = client.delete('/users/1')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'alice',
+        'email': 'alice@example.com',
+        'id': 1,
+    }
+
+    response = client.delete('/users/2')
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {
+        'detail': 'Usuário inexistente, adicione um usuário valido!'
+    }
