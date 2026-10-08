@@ -1,5 +1,6 @@
-from fatetime import datetime
-from sqlachemy import func
+from datetime import datetime
+
+from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, registry
 
 # Cria um registry, a variavel pode ter qualquer nome
