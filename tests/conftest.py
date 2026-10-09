@@ -1,6 +1,9 @@
+from contextlib import contextmanager
+from datetime import datetime
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
 
 from fastapi_zero.app import app
@@ -45,3 +48,39 @@ def session():
 
     # Depois do teste apaga todas as tabelas pra deixar o banco limpo.
     table_registry.metadata.drop_all(engine)
+
+
+# O @contextmanager deixa uma função com yield ser usada no with. A fixture
+# session nao precisa dele pq quem cuida do yield dela é o pytest, mas essa
+# função quem chama é o proprio teste, entao quem cuida do yield é o with.
+# Ela serve pra forçar uma data fixa no created_at, pq normalmente quem
+# preenche ele é o banco (func.now()) e no teste nao da pra saber a data
+# exata pra comparar. model é a tabela (ex: User) e time é a data fixa.
+@contextmanager
+def _mock_db_time(model, time=datetime(2025, 5, 20)):
+    # hook é uma função q o sqlalchemy chama sozinho quando acontece algo.
+    # target é o objeto q vai ser salvo (ex: o user), se ele tiver
+    # created_at coloca a data fixa nele. mapper e connection o sqlalchemy
+    # manda junto mas aqui nao são usados.
+    def fake_time_hook(mapper, connection, target):
+        if hasattr(target, 'created_at'):
+            target.created_at = time
+
+    # Liga o hook, fala pro sqlalchemy q antes de inserir (before_insert)
+    # um model no banco é pra rodar o fake_time_hook.
+    event.listen(model, 'before_insert', fake_time_hook)
+
+    # Entrega a data pro teste e pausa aqui, igual na fixture session.
+    # Quando sai do with a função continua do yield pra baixo.
+    yield time
+
+    # Desliga o hook pra nao afetar os outros testes.
+    event.remove(model, 'before_insert', fake_time_hook)
+
+
+# Fixture q entrega a função _mock_db_time pro teste, sem os parenteses ela
+# nao chama a função, só entrega ela. Assim o teste chama do jeito q quiser
+# escolhendo o model e a data, ex: with mock_db_time(model=User) as time:
+@pytest.fixture
+def mock_db_time():
+    return _mock_db_time
