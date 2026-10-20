@@ -1,6 +1,11 @@
 from http import HTTPStatus
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from fastapi_zero.database import get_session
+from fastapi_zero.models import User
 
 # Importar schemas
 from fastapi_zero.schemas import UserDB, UserList, UserPublic, UserSchema
@@ -23,20 +28,28 @@ def read_root():
 # oq precisa ser recebido de dados)
 # User é a variavel que armazena os dados recebidos do metodo http, e o
 # UserSchema é como os dados devem ser armazenado.
-def create_user(user: UserSchema):
-    # user_with_id é uma variavel q cria o usuario com id para adicionar-lo ao
-    # database, ele usa a função UserDB que é o contrato de input o userschema
-    # com id, dai ele descompacta com a função **model_dump() q fica igual o
-    # trem ali, e add o user q veio do input e poe só um id nele.
-    user_with_id = UserDB(**user.model_dump(), id=len(database) + 1)
-    # Model dump faz o trabalho braçal de:         username=user.username,
-    #                                              email=user.email,
-    #                                              password=user.password,
-    # pro dev nao precisar escrever na mão.
+def create_user(user: UserSchema, session: Session = Depends(get_session)):
 
-    # add o usuario no banco de dados ficticio.
-    database.append(user_with_id)
-    return user_with_id
+    db_user = session.scalar(
+        select(User).where(
+            (User.username == user.username) | (User.email == user.email)
+        )
+    )
+
+    if db_user:
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail='Usuario ou email já existentes!',
+        )
+
+    db_user = User(
+        username=user.username, email=user.email, password=user.password
+    )
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+
+    return db_user
 
 
 # Pydantic espera receber um dicionário com a chave chamada 'users' ( o

@@ -32,7 +32,7 @@ dev = [
 
 [tool.ruff]
 line-length = 79
-extend-exclude = ['migration']
+extend-exclude = ['migrations']
 
 [tool.ruff.lint]
 preview = true

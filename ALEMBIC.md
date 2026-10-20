@@ -93,12 +93,14 @@ alembic upgrade head --sql  # imprime o SQL que seria rodado (modo offline)
 
 ```python
 revision = 'c676ed5834cf'  # id desta migration
-down_revision = None       # id da anterior (None = primeira)
+down_revision = None  # id da anterior (None = primeira)
 
-def upgrade() -> None:     # o que fazer ao aplicar
+
+def upgrade() -> None:  # o que fazer ao aplicar
     op.create_table('users', ...)
 
-def downgrade() -> None:   # como desfazer
+
+def downgrade() -> None:  # como desfazer
     op.drop_table('users')
 ```
 
